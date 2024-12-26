@@ -99,6 +99,7 @@ class Agent(BaseAgent):
             if kwargs.get("append_messages") is None:
                 kwargs["append_messages"] = []
             kwargs["append_messages"].append(budget_msg)
+
         return super().construct_base_prompt(*args, **kwargs)
 
     def on_before_think(self, *args, **kwargs) -> ChatSequence:
