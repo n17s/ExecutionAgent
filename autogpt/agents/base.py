@@ -236,6 +236,8 @@ class BaseAgent(metaclass=ABCMeta):
         with open(workflow_path) as wpth:
             query = wpth.read()
 
+        import snoop
+        #with snoop(depth=3):
         return ask_chatgpt(system_prompt, query)
 
     def search_documentation(self,):
@@ -397,15 +399,22 @@ class BaseAgent(metaclass=ABCMeta):
 
         instruction = instruction or self.default_cycle_instruction
 
+
+        import snoop
+        #with snoop(depth=3):
         prompt: ChatSequence = self.construct_prompt(instruction, thought_process_id)
         prompt = self.on_before_think(prompt, thought_process_id, instruction)
         
         ## This is a line added by me to save prompts at each step
         self.prompt_text = prompt.dump()
         #logger.info("CURRENT DIRECTORY {}".format(os.getcwd()))
-        
 
-        with open(os.path.join("experimental_setups", self.exp_number, "logs", "prompt_history_{}".format(self.project_path.replace("/", ""))), "a+") as patf:
+        
+        prompt_history_fname = os.path.join("experimental_setups", self.exp_number, "logs", "prompt_history_{}".format(self.project_path.replace("/", "")))
+        if not os.path.exists(prompt_history_fname):
+            os.makedirs(os.path.dirname(prompt_history_fname), exist_ok=True)
+
+        with open(prompt_history_fname, "a+") as patf:
             patf.write(prompt.dump())
         
         with open(os.path.join("experimental_setups", self.exp_number, "logs", "cycles_list_{}".format(self.project_path.replace("/", ""))), "a+") as patf:
@@ -747,7 +756,12 @@ class BaseAgent(metaclass=ABCMeta):
         )  # FIXME: support function calls
 
         if self.cycle_type != "CMD":
-            self.summary_result = json.loads(llm_response.content)
+            try:
+                self.summary_result = json.loads(llm_response.content)
+            except json.decoder.JSONDecodeError as e:
+                self.summary_result = llm_response.content
+
+
             self.steps_object[self.current_step]["result_of_step"].append(self.summary_result)
             return
         

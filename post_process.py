@@ -23,7 +23,8 @@ def ask_chatgpt(query, system_message, model="gpt-4"):
     ]
 
     # Call the OpenAI API for chat completion
-    response = openai.ChatCompletion.create(
+    client = openai.OpenAI(api_key='whatever', base_url='http://localhost:5555/')
+    response = client.chat.completions.create(
         model=model,
         messages=messages
     )
@@ -88,11 +89,11 @@ def main():
         sys.exit(1)
 
     # Prepare the query for ask_chatgpt
-    query = (
-        "the following would represent the sequence of commands and reasoning made by an LLM trying to install \"{}\" project from source code and execute test cases. "
-        "I want you to summarize the encountered problems and give advice for next attempt. Be precise and concise. Address the most important and critical issues (ignore non critical warnings and so). Your response should have one header: ### Feedback from previous installation attempts\n".format(project_name)
-        f"+ {extracted_content}"
-    )
+    braces= "{}"
+    q1 = f"the following would represent the sequence of commands and reasoning made by an LLM trying to install {braces} project from source code and execute test cases." 
+    q2 = "I want you to summarize the encountered problems and give advice for next attempt. Be precise and concise. Address the most important and critical issues (ignore non critical warnings and so). Your response should have one header: ### Feedback from previous installation attempts\n".format(project_name)
+    q3 = f"+ {extracted_content}"
+    query = f"{q1}\n{q2}\n{q3}"
     
     system_message = (
         "You are a helpful software engineering assistant with capabilities of installing, building, configuring, and testing software projects."

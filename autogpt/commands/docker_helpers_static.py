@@ -5,7 +5,8 @@ import subprocess
 import re
 import time
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
+#from langchain.chat_models import ChatOpenAI
 from langchain.schema.messages import HumanMessage, SystemMessage, AIMessage
 
 ACTIVE_SCREEN = {
@@ -18,7 +19,7 @@ ACTIVE_SCREEN = {
 def ask_chatgpt(query, system_message, model="gpt-4o-mini"):
     with open("openai_token.txt") as opt:
         token = opt.read()
-    chat = ChatOpenAI(openai_api_key=token, model=model)
+    chat = ChatOpenAI(openai_api_base='http://localhost:5555/', openai_api_key=token, model=model)
 
     messages = [
         SystemMessage(
@@ -318,9 +319,14 @@ def execute_command_in_container_screen(container, command):
 # Start a container
 #container = start_container('your_image_tag')
 def stop_and_remove(container):
-    container.stop()
-    container.remove()
-    return "Container stopped and removed successfully"
+    if container is not None and container.status == 'running':
+        print(f"Stopping and removing container {container.short_id}...")
+        container.stop()
+        container.remove()
+        return "Container stopped and removed successfully"
+    else:
+        return "No running container to stop and remove."
+
     
 def run_container(image_tag, script_path):
     client = docker.from_env()

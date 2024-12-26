@@ -302,7 +302,8 @@ async def _create_completion(
     messages = [message.dict() for message in messages]
     if "functions" in kwargs:
         kwargs["functions"] = [function.json_schema for function in kwargs["functions"]]
-    return await openai.ChatCompletion.acreate(
+    client = openai.AsyncOpenAI(api_key='whatever', base_url='http://localhost:5555/')
+    return await client.chat.completions.create(
         messages=messages,
         **kwargs,
     )

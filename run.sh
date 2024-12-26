@@ -14,7 +14,7 @@ function find_python_command() {
 }
 
 PYTHON_CMD="python3.10"
-export OPENAI_API_KEY=GLOBAL-API-KEY-PLACEHOLDER
+export OPENAI_API_KEY=sk-foobar
 #echo "This is OPENAI_KEY..."
 #echo $OPENAI_API_KEY
 if $PYTHON_CMD -c "import sys; sys.exit(sys.version_info < (3, 10))"; then

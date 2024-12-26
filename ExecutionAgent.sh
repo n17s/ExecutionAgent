@@ -2,6 +2,7 @@
 
 # Default value for the number parameter
 num=40
+export OPENAI_API_BASE_URL='http://localhost:5555/'
 
 # Function to extract project name from GitHub URL
 # Extracts the last component of the URL, which is usually the project name

@@ -106,7 +106,7 @@ def extract_installation_documentation(project_path: str, agent: Agent) -> str:
 def ask_chatgpt(query, system_message, model="gpt-4o-mini"):
     with open("openai_token.txt") as opt:
         token = opt.read()
-    chat = ChatOpenAI(openai_api_key=token, model=model)
+    chat = FartOpenAI(openai_api_base='http://localhost:5555/', openai_api_key=token, model=model)
 
     messages = [
         SystemMessage(

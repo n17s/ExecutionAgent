@@ -38,7 +38,9 @@ from autogpt.workspace import Workspace
 from scripts.install_plugin_deps import install_plugin_dependencies
 from autogpt.commands.docker_helpers_static import stop_and_remove
 
+import snoop
 
+#@snoop(depth=2)
 def run_auto_gpt(
     continuous: bool,
     continuous_limit: int,
@@ -281,6 +283,7 @@ def run_interaction_loop(
         ########
         # Have the agent determine the next action to take.
         with spinner:
+            #with snoop(depth=2):
             command_name, command_args, assistant_reply_dict = agent.think()
 
         ###############
@@ -355,8 +358,8 @@ def run_interaction_loop(
             if command_name == "write_to_file":
                 simple_name = command_args["filename"].split("/")[-1] if "/" in command_args["filename"] else command_args["filename"]
                 # todo save written files here
-                if not os.path.exists("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path)):
-                    os.system("mkdir experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path))
+
+                os.makedirs("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path), exist_ok=True)
 
                 files_list = os.listdir("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path))
 
@@ -402,8 +405,10 @@ def run_interaction_loop(
             else:
                 logger.typewriter_log("SYSTEM: ", Fore.YELLOW, "Unable to execute command")
 
-            if not os.path.exists("experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path)):
-                os.system("mkdir experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path))
+            scfn = "experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path)
+            if not os.path.exists(scfn):
+                os.makedirs(scfn, exist_ok=True)
+                #os.system("mkdir experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path))
             agent.save_to_file("experimental_setups/{}/saved_contexts/{}/cycle_{}".format(agent.exp_number, agent.project_path, cycle_budget - cycles_remaining))
 
 import re

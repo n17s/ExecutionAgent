@@ -99,7 +99,8 @@ class Agent(BaseAgent):
             if kwargs.get("append_messages") is None:
                 kwargs["append_messages"] = []
             kwargs["append_messages"].append(budget_msg)
-
+        import snoop
+        #with snoop(depth=3):
         return super().construct_base_prompt(*args, **kwargs)
 
     def on_before_think(self, *args, **kwargs) -> ChatSequence:
@@ -185,7 +186,12 @@ class Agent(BaseAgent):
         with open("experimental_setups/experiments_list.txt") as eht:
             exps = eht.read().splitlines()
 
-        with open(os.path.join("experimental_setups", exps[-1], "responses", "model_responses_{}".format(self.project_path)), "a+") as patf:
+        mrfn = os.path.join("experimental_setups", exps[-1], "responses", "model_responses_{}".format(self.project_path))
+
+        if not os.path.exists(mrfn):
+            os.makedirs(os.path.dirname(mrfn), exist_ok=True)
+
+        with open(mrfn, "a+") as patf:
             patf.write(llm_response.content)
         assistant_reply_dict = extract_dict_from_response(llm_response.content)
 

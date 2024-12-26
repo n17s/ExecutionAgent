@@ -384,7 +384,7 @@ def check_openai_api_key(config: Config) -> None:
         openai_api_key = input(
             "If you do have the key, please enter your OpenAI API key now:\n"
         )
-        key_pattern = r"^sk-\w{48}"
+        key_pattern = r"^sk-\w+"
         openai_api_key = openai_api_key.strip()
         if re.search(key_pattern, openai_api_key):
             os.environ["OPENAI_API_KEY"] = openai_api_key

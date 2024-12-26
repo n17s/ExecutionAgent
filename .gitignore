@@ -63,3 +63,17 @@ poetry.lock
 
 # tokens
 openai_token.txt
+
+# logs
+logs/
+parsable_logs/
+search_logs/
+model_logging_temp.txt
+
+# cached data
+experimental_setups/saved_contexts/
+experimental_setups/files/
+experimental_setups/responses/
+execution_agent_workspace/
+parsing_erros_responses.txt
+response_content.txt
