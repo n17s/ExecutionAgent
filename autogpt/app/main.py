@@ -38,9 +38,7 @@ from autogpt.workspace import Workspace
 from scripts.install_plugin_deps import install_plugin_dependencies
 from autogpt.commands.docker_helpers_static import stop_and_remove
 
-import snoop
 
-#@snoop(depth=2)
 def run_auto_gpt(
     continuous: bool,
     continuous_limit: int,
@@ -283,7 +281,6 @@ def run_interaction_loop(
         ########
         # Have the agent determine the next action to take.
         with spinner:
-            #with snoop(depth=2):
             command_name, command_args, assistant_reply_dict = agent.think()
 
         ###############

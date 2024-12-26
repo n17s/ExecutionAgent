@@ -236,8 +236,6 @@ class BaseAgent(metaclass=ABCMeta):
         with open(workflow_path) as wpth:
             query = wpth.read()
 
-        import snoop
-        #with snoop(depth=3):
         return ask_chatgpt(system_prompt, query)
 
     def search_documentation(self,):
@@ -400,8 +398,6 @@ class BaseAgent(metaclass=ABCMeta):
         instruction = instruction or self.default_cycle_instruction
 
 
-        import snoop
-        #with snoop(depth=3):
         prompt: ChatSequence = self.construct_prompt(instruction, thought_process_id)
         prompt = self.on_before_think(prompt, thought_process_id, instruction)
         
