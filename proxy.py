@@ -110,7 +110,8 @@ async def proxy(request: Request):
                     url=azure_url,
                     headers=headers,
                     content=data,
-                    params=params
+                    params=params,
+                    timeout=300,
                 ) as response:
                     response_headers = filter_response_headers(response)
 
@@ -126,7 +127,8 @@ async def proxy(request: Request):
                     url=azure_url,
                     headers=headers,
                     content=data,
-                    params=params
+                    params=params,
+                    timeout=300,
                 )
                 response_headers = filter_response_headers(response)
 
