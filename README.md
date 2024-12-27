@@ -1,3 +1,28 @@
+# Running this with an Azure Endpoint
+
+First 
+```
+conda create -n exagent python=3.10
+conda activate exagent
+pip install -r requirements.txt
+pip install openai==1.58.1
+```
+Open in vs code and run in a dev container.
+Inside the dev container start the proxy 
+```
+python proxy.py
+```
+The proxy authenticates to Azure using DefaultAzureCredential and forwards all requests to a random working endpoint. Requests can be made using the standard OpenAI Python sdk only thing to remember is that when you make an openai.OpenAI client you need to pass `base_url='http://127.0.0.1:5555'`.
+  
+Next run 
+```
+echo -n "sk-whatever" > openai_token.txt
+```
+Finally you can run the agent on a repo you care about e.g.
+```
+bash ExecutionAgent.sh --repo https://github.com/0101/pipetools -l 25
+```
+
 # ExecutionAgent 🚀  
 Automate Building, Testing, and Validation of GitHub Projects in Isolated Containers  
 

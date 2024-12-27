@@ -404,8 +404,10 @@ class BaseAgent(metaclass=ABCMeta):
         self.prompt_text = prompt.dump()
         #logger.info("CURRENT DIRECTORY {}".format(os.getcwd()))
         
+        prompt_history_fname = os.path.join("experimental_setups", self.exp_number, "logs", "prompt_history_{}".format(self.project_path.replace("/", "")))
+        os.makedirs(os.path.dirname(prompt_history_fname), exist_ok=True)
 
-        with open(os.path.join("experimental_setups", self.exp_number, "logs", "prompt_history_{}".format(self.project_path.replace("/", ""))), "a+") as patf:
+        with open(prompt_history_fname, "a+") as patf:
             patf.write(prompt.dump())
         
         with open(os.path.join("experimental_setups", self.exp_number, "logs", "cycles_list_{}".format(self.project_path.replace("/", ""))), "a+") as patf:
@@ -747,7 +749,10 @@ class BaseAgent(metaclass=ABCMeta):
         )  # FIXME: support function calls
 
         if self.cycle_type != "CMD":
-            self.summary_result = json.loads(llm_response.content)
+            try:
+                self.summary_result = json.loads(llm_response.content)
+            except json.decoder.JSONDecodeError as e:
+                self.summary_result = llm_response.content
             self.steps_object[self.current_step]["result_of_step"].append(self.summary_result)
             return
         

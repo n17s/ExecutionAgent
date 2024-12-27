@@ -355,8 +355,7 @@ def run_interaction_loop(
             if command_name == "write_to_file":
                 simple_name = command_args["filename"].split("/")[-1] if "/" in command_args["filename"] else command_args["filename"]
                 # todo save written files here
-                if not os.path.exists("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path)):
-                    os.system("mkdir experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path))
+                os.makedirs("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path), exist_ok=True)
 
                 files_list = os.listdir("experimental_setups/{}/files/{}".format(agent.exp_number, agent.project_path))
 
@@ -402,8 +401,7 @@ def run_interaction_loop(
             else:
                 logger.typewriter_log("SYSTEM: ", Fore.YELLOW, "Unable to execute command")
 
-            if not os.path.exists("experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path)):
-                os.system("mkdir experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path))
+            os.makedirs("experimental_setups/{}/saved_contexts/{}".format(agent.exp_number, agent.project_path), exist_ok=True)
             agent.save_to_file("experimental_setups/{}/saved_contexts/{}/cycle_{}".format(agent.exp_number, agent.project_path, cycle_budget - cycles_remaining))
 
 import re

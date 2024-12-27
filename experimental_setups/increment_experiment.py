@@ -4,7 +4,11 @@ with open("experimental_setups/experiments_list.txt", "r+") as expl:
     exps = expl.read().splitlines()
     #print(exps)
     if exps:
-        last_exp = int(exps[-1].split("_")[1])
+        parts = exps[-1].split("_")
+        if len(parts) > 1:
+            last_exp = int(parts[1])
+        else:
+            last_exp = 0
     else:
         last_exp = 0
 

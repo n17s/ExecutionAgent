@@ -120,7 +120,7 @@ def create_chat_completion(
     if max_tokens is None:
         prompt_tlength = prompt.token_length
         max_tokens = (
-            min(OPEN_AI_CHAT_MODELS[model].max_tokens - prompt_tlength - 1, 4000)
+            min(OPEN_AI_CHAT_MODELS[model].max_tokens - prompt_tlength - 1, 3000)
         )  # the -1 is just here because we have a bug and we don't know how to fix it. When using gpt-4-0314 we get a token error.
         logger.debug(f"Prompt length: {prompt_tlength} tokens")
         if functions:
@@ -174,8 +174,8 @@ def create_chat_completion(
         raise RuntimeError(response.error)
 
     first_message: ResponseMessageDict = response.choices[0].message
-    content: str | None = first_message.get("content")
-    function_call: FunctionCallDict | None = first_message.get("function_call")
+    content: str | None = first_message.content
+    function_call: FunctionCallDict | None = first_message.tool_calls[0].function if first_message.tool_calls else None
 
     for plugin in config.plugins:
         if not plugin.can_handle_on_response():

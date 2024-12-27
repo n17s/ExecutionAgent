@@ -33,7 +33,7 @@ def extract_instructions_from_readme(project_path) -> str:
 
     return ask_chatgpt(query, system_prompt)
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.schema.messages import HumanMessage, SystemMessage, AIMessage
 def ask_chatgpt(query, system_message, model="gpt-4o-mini"):
     with open("openai_token.txt") as opt:

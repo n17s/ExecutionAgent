@@ -185,7 +185,9 @@ class Agent(BaseAgent):
         with open("experimental_setups/experiments_list.txt") as eht:
             exps = eht.read().splitlines()
 
-        with open(os.path.join("experimental_setups", exps[-1], "responses", "model_responses_{}".format(self.project_path)), "a+") as patf:
+        mrfn = os.path.join("experimental_setups", exps[-1], "responses", "model_responses_{}".format(self.project_path))
+        os.makedirs(os.path.dirname(mrfn), exist_ok=True)
+        with open(mrfn, "a+") as patf:
             patf.write(llm_response.content)
         assistant_reply_dict = extract_dict_from_response(llm_response.content)
 
